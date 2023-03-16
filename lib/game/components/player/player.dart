@@ -1,5 +1,8 @@
 
 import 'package:bandit/game/bandit_game.dart';
+import 'package:bandit/game/components/dash/can_dash_mixin.dart';
+import 'package:bandit/game/components/dash/face_movement_mixin.dart';
+import 'package:bandit/game/components/enemy/enemy.dart';
 import 'package:bandit/game/util/game_layers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -7,12 +10,13 @@ import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
-class BanditPlayer extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef<BanditGame> {
+class BanditPlayer extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef<BanditGame>, CanDash, FaceMovementDirection {
 
-  static final Vector2 playerSize = Vector2(100, 100);
+  static final Vector2 playerSize = Vector2(50, 50);
   static final Vector2 playerStart = Vector2(100, 100);
 
   double _speed = 0.2;
+  bool _invincible = false;
 
   BanditPlayer() : super(
     size: BanditPlayer.playerSize,
@@ -55,10 +59,14 @@ class BanditPlayer extends SpriteAnimationComponent with CollisionCallbacks, Has
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
-
-    gameRef.gameover(); // Calls the gameover function in the game
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
+    
+    if(_invincible) return; // If the player is invincible, return
+    
+    if(other is Enemy){
+      gameRef.gameover(); // Calls the gameover function in the game
+    }
   }
 
   @override
@@ -79,9 +87,10 @@ class BanditPlayer extends SpriteAnimationComponent with CollisionCallbacks, Has
  
 */
 
-  void moveTo(Vector2 position){
-    final effect = MoveToEffect(position, EffectController(duration: _speed, curve: Curves.decelerate));
-    add(effect);
+  void setInvincibility(bool invincible){
+    _invincible = invincible;
+    // Based on the value sets the opacity fo the sprite
+    setAlpha(invincible ? 127 : 255);
   }
 
 }

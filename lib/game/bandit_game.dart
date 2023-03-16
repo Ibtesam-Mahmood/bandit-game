@@ -1,5 +1,5 @@
-import 'package:bandit/game/components/enemy.dart';
-import 'package:bandit/game/components/player.dart';
+import 'package:bandit/game/components/enemy/enemy.dart';
+import 'package:bandit/game/components/player/player.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -22,7 +22,7 @@ class BanditGame extends FlameGame with TapDetector, HasCollisionDetection {
   void onTapUp(TapUpInfo info) {
     super.onTapUp(info);
 
-    player.moveTo(info.eventPosition.global);
+    player.dashTo(info.eventPosition.global);
   }
 
   void gameover(){
