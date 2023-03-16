@@ -1,3 +1,5 @@
+import 'package:bandit/game/bandit_game.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bandit Game',
       home: Scaffold(
-        body: Container()
+        body: GameWidget(game: BanditGame(),)
       ),
     );
   }
