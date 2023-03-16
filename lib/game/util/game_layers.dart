@@ -2,7 +2,9 @@
 enum GameLayers {
   background,
   enemy,
+  indicators,
   player,
+  lines,
   ui;
 }
 
