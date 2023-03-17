@@ -27,13 +27,6 @@ class BanditGame extends FlameGame with TapDetector, PanDetector, HasCollisionDe
   }
 
   @override
-  void onPanCancel() {
-    super.onPanCancel();
-
-    player.stopDash();
-  }
-
-  @override
   void onPanEnd(DragEndInfo info) {
     super.onPanEnd(info);
 
