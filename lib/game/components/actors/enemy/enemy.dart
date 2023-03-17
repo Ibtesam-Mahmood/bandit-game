@@ -47,6 +47,9 @@ class Enemy extends SpriteComponent with CollisionCallbacks {
 
       setVelocity(Vector2(velX, velY));
     }
+    else{
+      print('hi');
+    }
   }
 
   @override

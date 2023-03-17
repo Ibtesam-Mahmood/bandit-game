@@ -25,7 +25,7 @@ class DashLineIndicator extends Component {
   }
 
   CanDashActor get actor {
-    assert(parent is CanDashActor, 'Dasher must be added to a CanDashActor');
+    assert(parent is CanDashActor, 'DashLineIndicator must be added to a CanDashActor');
     return parent as CanDashActor;
   }
 

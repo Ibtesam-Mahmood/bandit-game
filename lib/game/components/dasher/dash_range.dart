@@ -11,7 +11,7 @@ class DashRange extends Component {
   
   late double radius = maxSize / 2;
 
-  DashRange({this.maxSize = 500}) : super(
+  DashRange({this.maxSize = 1000}) : super(
     priority: GameLayers.lines.layer
   );
 
@@ -23,7 +23,7 @@ class DashRange extends Component {
   }
 
   CanDashActor get actor {
-    assert(parent is CanDashActor, 'Dasher must be added to a CanDashActor');
+    assert(parent is CanDashActor, 'DashRange must be added to a CanDashActor');
     return parent as CanDashActor;
   }
 

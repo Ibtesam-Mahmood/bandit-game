@@ -1,6 +1,7 @@
 
 import 'package:bandit/game/components/actors/enemy/enemy.dart';
 import 'package:bandit/game/components/actors/player/player.dart';
+import 'package:bandit/game/components/dasher/kill_line/kill_line_pool.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -8,13 +9,15 @@ import 'package:flame/game.dart';
 class BanditGame extends FlameGame with TapDetector, PanDetector, HasCollisionDetection {
 
   late final BanditPlayer player = BanditPlayer();
+  late final KillLinePool killLinePool = KillLinePool();
   
   @override
   Future<void>? onLoad() async {
 
     add(ScreenHitbox()); // Adds a hitbox around the screen
     add(player); // Adds the player
-    add(Enemy(position: Vector2(300, 300))); // Adds an enemy
+    add(killLinePool); // Adds the player
+    // add(Enemy(position: Vector2(300, 300))); // Adds an enemy
 
     return super.onLoad();
   }

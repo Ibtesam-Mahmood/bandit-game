@@ -12,7 +12,7 @@ import 'package:flame/flame.dart';
 class BanditPlayer extends SpriteAnimationComponent with BaseActor, CollisionCallbacks, HasGameRef<BanditGame>, CanDashActor, FaceMovementDirection {
 
   static final Vector2 playerSize = Vector2(50, 50);
-  static final Vector2 playerStart = Vector2(100, 100);
+  static final Vector2 playerStart = Vector2(300, 300);
 
   BanditPlayer() : super(
     size: BanditPlayer.playerSize,
