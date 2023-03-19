@@ -13,9 +13,10 @@ mixin CanDashActor on BaseActor, HasGameRef<BanditGame> {
 
   late final DashRange range = DashRange();
   late final DashLineIndicator _rangeIndicator = DashLineIndicator();
+  late final KillLinePool killLinePool = KillLinePool(actor: this);
 
   bool dashing = false;
-  double dashSpeed = 0.2;
+  double dashSpeed = 800;
   void setDashing(bool dashing) => this.dashing = dashing;
   void setDashSpeed(double speed) => dashSpeed = speed;
   
@@ -24,7 +25,7 @@ mixin CanDashActor on BaseActor, HasGameRef<BanditGame> {
 
     add(range);
     add(_rangeIndicator);
-    // add(killLinePool);
+    add(killLinePool);
 
     return super.onLoad();
   }
@@ -34,8 +35,8 @@ mixin CanDashActor on BaseActor, HasGameRef<BanditGame> {
     super.update(dt);
     
     // If the killLinePool has an active line than update it with the current center
-    if(gameRef.killLinePool.hasActiveLine){
-      gameRef.killLinePool.traceLine(center);
+    if(killLinePool.hasActiveLine){
+      killLinePool.traceLine(center);
     }
   }
 
@@ -57,16 +58,16 @@ mixin CanDashActor on BaseActor, HasGameRef<BanditGame> {
   void dash([Vector2? position]){
     if(dashing || _rangeIndicator.isClear) return;
     setDashing(true);
-    gameRef.killLinePool.startLine(center);
+    killLinePool.startLine(center);
     final effect = MoveToEffect(
       (position ?? _rangeIndicator.end) - Vector2.all(width/2), 
       EffectController(
-        duration: dashSpeed, 
+        speed: dashSpeed, 
         curve: Curves.decelerate
       ),
       onComplete: () {
         setDashing(false);
-        gameRef.killLinePool.endLine();
+        killLinePool.endLine();
       },
     );
     add(effect);

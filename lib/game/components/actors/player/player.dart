@@ -36,8 +36,6 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, CollisionCal
 
   @override
   Future<void> onLoad() async {
-    debugMode = true; // Enables debug mode for the player
-    debugPaint.strokeWidth = 5; // Sets the width of the debug lines
 
     add(CircleHitbox()); // Adds a hitbox to the player in the shape of a circle
 

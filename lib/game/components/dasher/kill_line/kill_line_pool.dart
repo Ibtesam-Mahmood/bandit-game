@@ -4,21 +4,28 @@ import 'package:bandit/game/components/dasher/can_dash_mixin.dart';
 import 'package:bandit/game/components/dasher/kill_line/kill_line.dart';
 import 'package:flame/components.dart';
 
-class KillLinePool extends PositionComponent {
+class KillLinePool extends Component {
 
-  static const Duration defaultLineLife = Duration(milliseconds: 300);
+  static const Duration defaultLineLife = Duration(milliseconds: 3000);
 
   final Duration lineLife;
 
   KillLine? line;
+  CanDashActor actor;
 
-  KillLinePool({this.lineLife = KillLinePool.defaultLineLife});
+  KillLinePool({
+    required this.actor,
+    this.lineLife = KillLinePool.defaultLineLife
+  }) : super(
+    // position: Vector2.zero(),
+  );
+  
 
   void startLine(Vector2 start){
     removeLine();
     line = KillLine(start: start);
-    line!.traceTo(start);
     add(line!);
+    line!.traceTo(start);
   }
 
   void traceLine(Vector2 end){
@@ -43,10 +50,6 @@ class KillLinePool extends PositionComponent {
 
   bool get hasActiveLine => line != null && line!.drawing;
 
-  // bool get isPlayerPool => actor.type == BaseActorType.player;
-  
-  // CanDashActor get actor {
-  //   assert(parent is CanDashActor, 'KillLinePool must be added to a CanDashActor');
-  //   return parent as CanDashActor;
-  // }
+  BaseActorType get actorType => actor.type;
+
 }

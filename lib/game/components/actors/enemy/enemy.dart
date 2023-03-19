@@ -32,8 +32,8 @@ class Enemy extends SpriteComponent with CollisionCallbacks {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
 
     if(other is ScreenHitbox){
       // Reserve the velocity based on the wall that was hit

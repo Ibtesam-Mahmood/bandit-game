@@ -9,15 +9,13 @@ import 'package:flame/game.dart';
 class BanditGame extends FlameGame with TapDetector, PanDetector, HasCollisionDetection {
 
   late final BanditPlayer player = BanditPlayer();
-  late final KillLinePool killLinePool = KillLinePool();
   
   @override
   Future<void>? onLoad() async {
 
     add(ScreenHitbox()); // Adds a hitbox around the screen
     add(player); // Adds the player
-    add(killLinePool); // Adds the player
-    // add(Enemy(position: Vector2(300, 300))); // Adds an enemy
+    add(Enemy(position: Vector2(500, 300))); // Adds an enemy
 
     return super.onLoad();
   }
