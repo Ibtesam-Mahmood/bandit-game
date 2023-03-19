@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 
 class KillLinePool extends Component {
 
-  static const Duration defaultLineLife = Duration(milliseconds: 3000);
+  static const Duration defaultLineLife = Duration(milliseconds: 200);
 
   final Duration lineLife;
 

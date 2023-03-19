@@ -1,15 +1,21 @@
 
 import 'dart:math';
 
+import 'package:bandit/game/components/actors/base_actor.dart';
+import 'package:bandit/game/components/actors/player/player.dart';
+import 'package:bandit/game/components/dasher/can_dash_mixin.dart';
 import 'package:bandit/game/util/game_layers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 
-class Enemy extends SpriteComponent with CollisionCallbacks {
+class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashActor {
 
   static final Vector2 enemySize = Vector2(50, 50);
   static const double enemySpeed = 400;
+
+  @override
+  BaseActorType get type => BaseActorType.enemy;
 
   late Vector2 velocity;
   
@@ -18,13 +24,15 @@ class Enemy extends SpriteComponent with CollisionCallbacks {
     priority: GameLayers.enemy.layer
   );
 
+  late final hb = RectangleHitbox();
+
   @override
   Future<void> onLoad() async {
     
     final image = await Flame.images.load('./boxes/1.png');
     sprite = Sprite(image);
 
-    add(RectangleHitbox());
+    add(hb);
 
     setVelocity(); // Randomly sets the velocity of the enemy
 
@@ -47,8 +55,8 @@ class Enemy extends SpriteComponent with CollisionCallbacks {
 
       setVelocity(Vector2(velX, velY));
     }
-    else{
-      print('hi');
+    else if(other is BanditPlayer){
+      other.damage();
     }
   }
 
@@ -57,6 +65,13 @@ class Enemy extends SpriteComponent with CollisionCallbacks {
     super.update(dt);
 
     position.add(velocity * dt);
+  }
+
+  @override
+  void onDeath() {
+    super.onDeath();
+    velocity = Vector2.zero();
+    remove(hb);
   }
 
   void setVelocity([Vector2? direction]) {
@@ -70,5 +85,6 @@ class Enemy extends SpriteComponent with CollisionCallbacks {
 
     velocity = direction.normalized() * Enemy.enemySpeed;
   }
+
 
 }

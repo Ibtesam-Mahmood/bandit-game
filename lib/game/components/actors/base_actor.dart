@@ -14,4 +14,12 @@ mixin BaseActor on PositionComponent {
   BaseActorType get type;
   bool get isPlayer => type == BaseActorType.player;
   bool get isEnemy => type == BaseActorType.enemy;
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if(isDead) onDeath();
+  }
+
+  void onDeath(){}
 }

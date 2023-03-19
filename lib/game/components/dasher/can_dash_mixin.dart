@@ -9,7 +9,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 
-mixin CanDashActor on BaseActor, HasGameRef<BanditGame> {
+mixin CanDashActor on BaseActor {
 
   late final DashRange range = DashRange();
   late final DashLineIndicator _rangeIndicator = DashLineIndicator();
@@ -28,6 +28,11 @@ mixin CanDashActor on BaseActor, HasGameRef<BanditGame> {
     add(killLinePool);
 
     return super.onLoad();
+  }
+
+  @override
+  void damage() {
+    if(!dashing) super.damage();
   }
 
   @override

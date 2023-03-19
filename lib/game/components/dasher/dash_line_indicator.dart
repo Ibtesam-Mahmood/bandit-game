@@ -17,7 +17,7 @@ class DashLineIndicator extends Component {
   @override
   void render(Canvas canvas) {
     
-    if(isClear) return; // Don't render if there is no line to draw
+    if(isClear || actor.type != BaseActorType.player) return; // Don't render if there is no line to draw
 
     final start = actor.parentToLocal(actor.center).toOffset();
     final end = actor.parentToLocal(_endPoint).toOffset();

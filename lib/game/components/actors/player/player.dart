@@ -9,7 +9,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 
-class BanditPlayer extends SpriteAnimationComponent with BaseActor, CollisionCallbacks, HasGameRef<BanditGame>, CanDashActor, FaceMovementDirection {
+class BanditPlayer extends SpriteAnimationComponent with BaseActor, HasGameRef<BanditGame>, CanDashActor, FaceMovementDirection {
 
   static final Vector2 playerSize = Vector2(50, 50);
   static final Vector2 playerStart = Vector2(300, 300);
@@ -56,14 +56,16 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, CollisionCal
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-        
-    if(dashing) return; // If the player is invincible, return
-    
-    if(other is Enemy){
-      gameRef.gameover(); // Calls the gameover function in the game
-    }
+  void setDashing(bool dashing){
+    super.setDashing(dashing);
+    // Based on the value sets the opacity fo the sprite
+    setAlpha(dashing ? 127 : 255);
+  }
+
+  @override
+  void onDeath() {
+    super.onDeath();
+    gameRef.gameover();
   }
 
   @override
@@ -83,12 +85,5 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, CollisionCal
                                                
  
 */
-
-  @override
-  void setDashing(bool dashing){
-    super.setDashing(dashing);
-    // Based on the value sets the opacity fo the sprite
-    setAlpha(dashing ? 127 : 255);
-  }
 
 }

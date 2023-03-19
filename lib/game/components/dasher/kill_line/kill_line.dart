@@ -8,7 +8,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-class KillLine extends RectangleComponent {
+class KillLine extends RectangleComponent with CollisionCallbacks {
 
   final Vector2 start;
   Vector2? end;
@@ -41,6 +41,16 @@ class KillLine extends RectangleComponent {
     if(width <= 0 || parent == null) return; 
 
     canvas.drawLine(Vector2(0, 0).toOffset(), Vector2(width, 0).toOffset(), _paint);
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+
+    // dammage the other actor
+    if(other is BaseActor && other.type != pool.actor.type){
+      other.damage();
+    }
   }
 
   Paint get _paint => Paint()
