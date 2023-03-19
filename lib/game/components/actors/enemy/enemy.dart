@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:bandit/game/components/actors/base_actor.dart';
+import 'package:bandit/game/components/actors/enemy/enemy_spawner.dart';
 import 'package:bandit/game/components/actors/player/player.dart';
 import 'package:bandit/game/components/dasher/can_dash_mixin.dart';
 import 'package:bandit/game/util/game_layers.dart';
@@ -70,8 +71,7 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
   @override
   void onDeath() {
     super.onDeath();
-    velocity = Vector2.zero();
-    remove(hb);
+    spawner.despawn(this);
   }
 
   void setVelocity([Vector2? direction]) {
@@ -87,4 +87,8 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
   }
 
 
+  EnemySpawer get spawner {
+    assert(parent is EnemySpawer, 'Enemy must be added to a EnemySpawer');
+    return parent as EnemySpawer;
+  }
 }
