@@ -11,9 +11,20 @@ import 'package:flutter/material.dart';
 
 mixin CanDashActor on BaseActor {
 
-  late final DashRange range = DashRange();
+  double get initialDashRange => 1000;
+  double get dashReloadTime => 0.6;
+  Duration get lineLife => KillLinePool.defaultLineLife;
+
+  late final DashRange range = DashRange(
+    maxSize: initialDashRange,
+    reloadTime: dashReloadTime,
+    onDetect: onDetect
+  );
   late final DashLineIndicator _rangeIndicator = DashLineIndicator();
-  late final KillLinePool killLinePool = KillLinePool(actor: this);
+  late final KillLinePool killLinePool = KillLinePool(
+    actor: this,
+    lineLife: lineLife
+  );
 
   bool dashing = false;
   double dashSpeed = 800;
@@ -62,6 +73,9 @@ mixin CanDashActor on BaseActor {
 
   void dash([Vector2? position]){
     if(dashing || _rangeIndicator.isClear) return;
+    else if(!range.reloaded) return _rangeIndicator.clear();
+
+    range.reload();
     setDashing(true);
     killLinePool.startLine(center);
     final effect = MoveToEffect(
@@ -77,5 +91,7 @@ mixin CanDashActor on BaseActor {
     );
     add(effect);
   }
+
+  void onDetect(BaseActor other){}
 
 }

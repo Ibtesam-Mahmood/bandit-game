@@ -86,4 +86,12 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, HasGameRef<B
  
 */
 
+  // @override 
+  // void onDetect(BaseActor other, ) {
+  //   super.onDetect(other);
+  //   if(other.type == BaseActorType.enemy){
+  //     prepareDash(other.center);
+  //     dash();
+  //   }
+  // }
 }

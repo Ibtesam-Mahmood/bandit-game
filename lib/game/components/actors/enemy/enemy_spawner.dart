@@ -7,8 +7,6 @@ import 'package:bandit/game/bandit_game.dart';
 import 'package:bandit/game/components/actors/enemy/enemy.dart';
 import 'package:bandit/game/components/actors/enemy/enemy_spawn_indicator.dart';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
-import 'package:flutter/material.dart';
 
 class EnemySpawer extends Component with HasGameRef<BanditGame> {
 

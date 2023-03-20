@@ -16,6 +16,15 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
   static const double enemySpeed = 400;
 
   @override
+  double get initialDashRange => 300;
+
+  @override
+  double get dashReloadTime => 2;
+
+  @override
+  Duration get lineLife => const Duration(seconds: 2);
+
+  @override
   BaseActorType get type => BaseActorType.enemy;
 
   late Vector2 velocity;
@@ -32,6 +41,8 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
     
     final image = await Flame.images.load('./boxes/1.png');
     sprite = Sprite(image);
+
+    range.reload();
 
     add(hb);
 
@@ -91,4 +102,13 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
     assert(parent is EnemySpawer, 'Enemy must be added to a EnemySpawer');
     return parent as EnemySpawer;
   }
+
+  // @override 
+  // void onDetect(BaseActor other) {
+  //   super.onDetect(other);
+  //   if(other.type == BaseActorType.player){
+  //     prepareDash(other.center);
+  //     dash();
+  //   }
+  // }
 }
