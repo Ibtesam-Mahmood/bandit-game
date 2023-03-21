@@ -12,6 +12,9 @@ mixin BaseActor on PositionComponent {
   void damage([bool override = false]) {
     health -= 1;
   }
+  void hit(BaseActor other, {bool override = false}){
+    other.damage(override);
+  }
   
   BaseActorType get type;
   bool get isPlayer => type == BaseActorType.player;

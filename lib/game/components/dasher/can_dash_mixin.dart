@@ -12,15 +12,15 @@ import 'package:flutter/material.dart';
 mixin CanDashActor on BaseActor {
 
   double get initialDashRange => 1000;
-  double get dashReloadTime => 0.3;
+  double get dashReloadTime => 0.1;
   Duration get lineLife => KillLinePool.defaultLineLife;
 
   late final DashRange range = DashRange(
-    maxSize: initialDashRange,
+    initialSize: initialDashRange,
     reloadTime: dashReloadTime,
     onDetect: onDetect
   );
-  late final DashLineIndicator _rangeIndicator = DashLineIndicator();
+  late final DashLineIndicator rangeIndicator = DashLineIndicator();
   late final KillLinePool killLinePool = KillLinePool(
     actor: this,
     lineLife: lineLife
@@ -35,7 +35,7 @@ mixin CanDashActor on BaseActor {
   Future<void>? onLoad() async {
 
     add(range);
-    add(_rangeIndicator);
+    add(rangeIndicator);
     parent?.add(killLinePool);
 
     return super.onLoad();
@@ -62,45 +62,48 @@ mixin CanDashActor on BaseActor {
     if(killLinePool.hasActiveLine){
       killLinePool.traceLine(center);
     }
+
   }
 
   void stopDash() {
     if(dashing) return;
-    _rangeIndicator.clear();
+    rangeIndicator.clear();
   }
 
   void prepareDash(Vector2 position) {
-    if(dashing) return;
+    if(!range.reloaded) return;
     
     // Bind the position to the dash range
     position = range.bindToRange(position);
 
     // set the indicator to the position
-    _rangeIndicator.setPoint(position);
+    rangeIndicator.setPoint(position);
   }
 
   void dash([Vector2? position]){
-    if(dashing || _rangeIndicator.isClear) {
+    if(rangeIndicator.isClear) {
       return;
     } else if(!range.reloaded) {
-      return _rangeIndicator.clear();
+      return rangeIndicator.clear();
     }
 
     range.reload();
     setDashing(true);
     killLinePool.startLine(center);
     final effect = MoveToEffect(
-      (position ?? _rangeIndicator.end) - Vector2.all(width/2), 
+      (position ?? rangeIndicator.end) - Vector2.all(width/2), 
       EffectController(
         speed: dashSpeed, 
         curve: Curves.decelerate
       ),
-      onComplete: () {
-        setDashing(false);
-        killLinePool.endLine();
-      },
+      onComplete: onDashComplete,
     );
     add(effect);
+  }
+
+  void onDashComplete(){
+    setDashing(false);
+    killLinePool.endLine();
   }
 
   void onDetect(BaseActor other){}

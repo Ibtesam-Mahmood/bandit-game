@@ -49,7 +49,7 @@ class KillLine extends RectangleComponent with CollisionCallbacks {
 
     // dammage the other actor
     if(other is BaseActor && other.type != pool.actor.type){
-      other.damage(true);
+      pool.actor.hit(other, override: true);
     }
   }
 

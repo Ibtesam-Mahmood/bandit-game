@@ -68,7 +68,7 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
       setVelocity(Vector2(velX, velY));
     }
     else if(other is BanditPlayer){
-      // other.damage();
+      other.damage();
     }
   }
 

@@ -9,10 +9,8 @@ import 'dart:math' as math;
 
 class DashRange extends PositionComponent with CollisionCallbacks {
   
-  final double maxSize;
+  final double initialSize;
   
-  late double radius = maxSize / 2;
-
   bool get reloaded => _timeTillReloaded <= 0;
   double _timeTillReloaded = 0;
 
@@ -20,14 +18,16 @@ class DashRange extends PositionComponent with CollisionCallbacks {
   final double reloadTime;
   final Function(BaseActor other)? onDetect;
 
-  DashRange({this.onDetect, this.maxSize = 1000, this.reloadTime = 0.6}) : super(
+  DashRange({this.onDetect, this.initialSize = 1000, this.reloadTime = 0.6}) : super(
     priority: GameLayers.lines.layer,
-    position: Vector2.all(-1 * maxSize / 2 + 25),
-    size: Vector2.all(maxSize)
+    size: Vector2.all(initialSize)
   );
     
   @override
   Future<void>? onLoad() async {
+    // debugMode = true;
+
+    updatePosition();
 
     add(CircleHitbox());
     return super.onLoad();
@@ -54,7 +54,8 @@ class DashRange extends PositionComponent with CollisionCallbacks {
   void render(Canvas canvas) {
     // debugMode = true; // Enables debug mode for the player
     // debugPaint.strokeWidth = 5; // Sets the width of the debug lines
-    canvas.drawDashedCircle(Vector2.all(radius).toOffset(), radius, _rangePaint, rotation: (reloadTime - _timeTillReloaded) / reloadTime);
+    // canvas.drawCircle(parentToLocal(center).toOffset(), 2, _rangePaint);
+    canvas.drawDashedCircle(parentToLocal(center).toOffset(), radius, _rangePaint, rotation: (reloadTime - _timeTillReloaded) / reloadTime);
   }
 
   CanDashActor get actor {
@@ -80,6 +81,24 @@ class DashRange extends PositionComponent with CollisionCallbacks {
 
   void reload() {
     _timeTillReloaded = reloadTime;
+  }
+
+  double get radius => size.x / 2;
+
+  void shrink(double amount){
+    final newSize = math.max((radius * 2) - amount, actor.size.x);
+    size = Vector2.all(newSize);
+    updatePosition();
+  }
+
+  void grow(double amount){
+    final newSize = math.min((radius * 2) + amount, initialSize);
+    size = Vector2.all(newSize);
+    updatePosition();
+  }
+
+  void updatePosition(){
+    position = Vector2.all(-1 * size.x / 2 + actor.size.x / 2);
   }
 }
 
