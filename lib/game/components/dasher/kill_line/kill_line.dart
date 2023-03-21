@@ -19,7 +19,7 @@ class KillLine extends RectangleComponent with CollisionCallbacks {
   }) :start = start.clone(), 
       super(
         position: start.clone(), 
-        anchor: Anchor.topRight, 
+        anchor: Anchor.bottomRight, 
         size: Vector2.zero(), 
         priority: GameLayers.lines.layer
       );
@@ -28,7 +28,7 @@ class KillLine extends RectangleComponent with CollisionCallbacks {
   Future<void>? onLoad() async {
     // debugMode = true;
 
-    position = pool.actor.parentToLocal(start);
+    // position = pool.actor.parentToLocal(start);
     add(RectangleHitbox());
 
     return super.onLoad();
@@ -44,12 +44,12 @@ class KillLine extends RectangleComponent with CollisionCallbacks {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
 
     // dammage the other actor
     if(other is BaseActor && other.type != pool.actor.type){
-      other.damage();
+      other.damage(true);
     }
   }
 
@@ -75,7 +75,7 @@ class KillLine extends RectangleComponent with CollisionCallbacks {
     // Calculate the angle and magnitude of the line
     final diff = (newEnd - start).clone();
     bool isUpwards = diff.y < 0;
-    angle = (isUpwards ? -1 : 1) * Vector2(1, 0).angleTo(diff);
+    angle = (isUpwards ? 1 : -1) * Vector2(-1, 0).angleTo(diff);
     size = Vector2(diff.length, _paint.strokeWidth);
   }
 

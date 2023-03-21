@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 mixin CanDashActor on BaseActor {
 
   double get initialDashRange => 1000;
-  double get dashReloadTime => 0.6;
+  double get dashReloadTime => 0.3;
   Duration get lineLife => KillLinePool.defaultLineLife;
 
   late final DashRange range = DashRange(
@@ -36,14 +36,22 @@ mixin CanDashActor on BaseActor {
 
     add(range);
     add(_rangeIndicator);
-    add(killLinePool);
+    parent?.add(killLinePool);
 
     return super.onLoad();
   }
 
+  
   @override
-  void damage() {
-    if(!dashing) super.damage();
+  void onDeath() {
+    super.onDeath();
+    killLinePool.clear();
+    parent?.remove(killLinePool);
+  }
+
+  @override
+  void damage([bool override = false]) {
+    if(!dashing || override) super.damage(override);
   }
 
   @override
@@ -72,8 +80,11 @@ mixin CanDashActor on BaseActor {
   }
 
   void dash([Vector2? position]){
-    if(dashing || _rangeIndicator.isClear) return;
-    else if(!range.reloaded) return _rangeIndicator.clear();
+    if(dashing || _rangeIndicator.isClear) {
+      return;
+    } else if(!range.reloaded) {
+      return _rangeIndicator.clear();
+    }
 
     range.reload();
     setDashing(true);

@@ -72,7 +72,7 @@ class DashRange extends PositionComponent with CollisionCallbacks {
     if(normalized.distanceTo(Vector2.zero()) > radius){
       // Reduce the magnitude of the vector to the radius
       normalized = normalized.normalized() * radius;
-      return actor.center + normalized - Vector2.all(25);
+      return actor.center + normalized;
     }
 
     return position;

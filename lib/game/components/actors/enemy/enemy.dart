@@ -16,7 +16,7 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
   static const double enemySpeed = 400;
 
   @override
-  double get initialDashRange => 300;
+  double get initialDashRange => 400;
 
   @override
   double get dashReloadTime => 2;
@@ -68,7 +68,7 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
       setVelocity(Vector2(velX, velY));
     }
     else if(other is BanditPlayer){
-      other.damage();
+      // other.damage();
     }
   }
 
@@ -103,12 +103,12 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
     return parent as EnemySpawer;
   }
 
-  // @override 
-  // void onDetect(BaseActor other) {
-  //   super.onDetect(other);
-  //   if(other.type == BaseActorType.player){
-  //     prepareDash(other.center);
-  //     dash();
-  //   }
-  // }
+  @override 
+  void onDetect(BaseActor other) {
+    super.onDetect(other);
+    if(other.type == BaseActorType.player){
+      prepareDash(other.center);
+      dash();
+    }
+  }
 }

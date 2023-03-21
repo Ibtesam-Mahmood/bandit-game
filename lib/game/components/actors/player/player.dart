@@ -36,6 +36,7 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, HasGameRef<B
 
   @override
   Future<void> onLoad() async {
+    // debugMode = true;
 
     add(CircleHitbox()); // Adds a hitbox to the player in the shape of a circle
 

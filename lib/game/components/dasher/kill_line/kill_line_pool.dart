@@ -48,6 +48,10 @@ class KillLinePool extends Component {
     line = null;
   }
 
+  void clear(){
+    removeLine();
+  }
+
   bool get hasActiveLine => line != null && line!.drawing;
 
   BaseActorType get actorType => actor.type;
