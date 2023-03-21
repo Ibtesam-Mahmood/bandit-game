@@ -1,6 +1,7 @@
 
 import 'dart:math';
 
+import 'package:bandit/game/bandit_game.dart';
 import 'package:bandit/game/components/actors/base_actor.dart';
 import 'package:bandit/game/components/actors/enemy/enemy_spawner.dart';
 import 'package:bandit/game/components/actors/player/player.dart';
@@ -10,7 +11,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 
-class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashActor {
+class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashActor, HasGameRef<BanditGame> {
 
   static final Vector2 enemySize = Vector2(50, 50);
   static const double enemySpeed = 400;
@@ -19,10 +20,10 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
   double get initialDashRange => 400;
 
   @override
-  double get dashReloadTime => 2;
+  double get dashReloadTime => 1.3;
 
   @override
-  double get lineLife => 2;
+  double get lineLife => 4;
 
   @override
   int get linePoolSize => 4;
@@ -75,11 +76,23 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
     }
   }
 
+  bool preparingDash = false;
   @override
   void update(double dt) {
     super.update(dt);
 
     position.add(velocity * dt);
+
+    if(range.reloaded && !preparingDash){
+      preparingDash = true;
+      prepareDash(gameRef.player.center);
+      Future.delayed(Duration(milliseconds: 500), () {
+        if(range.reloaded){
+          dash();
+        }
+        preparingDash = false;
+      });
+    }
   }
 
   @override
@@ -109,7 +122,7 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
   @override 
   void onDetect(BaseActor other) {
     super.onDetect(other);
-    if(other.type == BaseActorType.player){
+    if(other.type == BaseActorType.player && range.reloaded){
       prepareDash(other.center);
       dash();
     }
