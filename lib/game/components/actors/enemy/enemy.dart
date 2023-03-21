@@ -22,7 +22,10 @@ class Enemy extends SpriteComponent with CollisionCallbacks, BaseActor, CanDashA
   double get dashReloadTime => 2;
 
   @override
-  Duration get lineLife => const Duration(seconds: 2);
+  double get lineLife => 2;
+
+  @override
+  int get linePoolSize => 4;
 
   @override
   BaseActorType get type => BaseActorType.enemy;

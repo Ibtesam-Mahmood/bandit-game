@@ -2,6 +2,7 @@
 import 'package:bandit/game/components/actors/base_actor.dart';
 import 'package:bandit/game/components/dasher/dash_line_indicator.dart';
 import 'package:bandit/game/components/dasher/dash_range.dart';
+import 'package:bandit/game/components/dasher/kill_line/kill_line.dart';
 import 'package:bandit/game/components/dasher/kill_line/kill_line_pool.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -10,8 +11,9 @@ import 'package:flutter/material.dart';
 mixin CanDashActor on BaseActor {
 
   double get initialDashRange => 1000;
-  double get dashReloadTime => 0.4;
-  Duration get lineLife => KillLinePool.defaultLineLife;
+  double get dashReloadTime => 0.3;
+  int get linePoolSize => 3;
+  double get lineLife => KillLinePool.defaultLineLife;
 
   late final DashRange range = DashRange(
     initialSize: initialDashRange,
@@ -21,7 +23,8 @@ mixin CanDashActor on BaseActor {
   late final DashLineIndicator rangeIndicator = DashLineIndicator();
   late final KillLinePool killLinePool = KillLinePool(
     actor: this,
-    lineLife: lineLife
+    lineLife: lineLife,
+    poolSize: linePoolSize
   );
 
   bool dashing = false;
@@ -69,6 +72,7 @@ mixin CanDashActor on BaseActor {
   }
 
   void prepareDash(Vector2 position) {
+    // if(dashing) return;
     if(!range.reloaded) return;
     
     // Bind the position to the dash range
@@ -79,6 +83,7 @@ mixin CanDashActor on BaseActor {
   }
 
   void dash([Vector2? position]){
+    // if(dashing) return;
     if(rangeIndicator.isClear) {
       return;
     } else if(!range.reloaded) {
@@ -87,21 +92,23 @@ mixin CanDashActor on BaseActor {
 
     range.reload();
     setDashing(true);
-    killLinePool.startLine(center);
+    final newLine = killLinePool.startLine(center);
     final effect = MoveToEffect(
       (position ?? rangeIndicator.end) - Vector2.all(width/2), 
       EffectController(
         speed: dashSpeed, 
         curve: Curves.decelerate
       ),
-      onComplete: onDashComplete,
+      onComplete: () => onDashComplete(newLine),
     );
     add(effect);
   }
 
-  void onDashComplete(){
+  void onDashComplete(KillLine line){
     setDashing(false);
-    killLinePool.endLine();
+    if(line.drawing){
+      killLinePool.endLine();
+    }
   }
 
   void onDetect(BaseActor other){}

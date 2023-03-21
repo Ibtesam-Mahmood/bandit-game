@@ -6,13 +6,15 @@ import 'package:bandit/game/components/dasher/kill_line/kill_line_pool.dart';
 import 'package:bandit/game/util/game_layers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 
-class KillLine extends RectangleComponent with CollisionCallbacks {
+class KillLine extends RectangleComponent with CollisionCallbacks, OpacityProvider {
 
   final Vector2 start;
   Vector2? end;
   bool drawing = false;
+  double _opacity = 1.0;
 
   KillLine({
     required Vector2 start, 
@@ -54,7 +56,7 @@ class KillLine extends RectangleComponent with CollisionCallbacks {
   }
 
   Paint get _paint => Paint()
-    ..color = (pool.actorType == BaseActorType.player ? Colors.white : Colors.red).withOpacity(0.5)
+    ..color = (pool.actorType == BaseActorType.player ? Colors.white : Colors.red).withOpacity(0.5 * _opacity)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 3;
 
@@ -82,4 +84,22 @@ class KillLine extends RectangleComponent with CollisionCallbacks {
   void stop() {
     drawing = false;
   }
+
+  void fadeAway(double duration, [Function()? onComplete]){
+    final fadeOut = OpacityEffect.to(
+      0.0,
+      EffectController(
+        duration: duration,
+        curve: Curves.decelerate,
+      ),
+      target: this,
+      onComplete: onComplete,
+    );
+    add(fadeOut);
+  }
+
+  @override
+  double get opacity => _opacity;
+  @override
+  set opacity(double value) => _opacity = value;
 }

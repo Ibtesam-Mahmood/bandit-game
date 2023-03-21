@@ -3,6 +3,7 @@ import 'package:bandit/game/bandit_game.dart';
 import 'package:bandit/game/components/actors/base_actor.dart';
 import 'package:bandit/game/components/actors/enemy/enemy.dart';
 import 'package:bandit/game/components/dasher/can_dash_mixin.dart';
+import 'package:bandit/game/components/dasher/kill_line/kill_line.dart';
 import 'package:bandit/game/components/mixins/face_movement_mixin.dart';
 import 'package:bandit/game/util/game_layers.dart';
 import 'package:flame/collisions.dart';
@@ -106,8 +107,8 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, HasGameRef<B
     
   }
   @override
-  void onDashComplete() {
-    super.onDashComplete();
+  void onDashComplete(KillLine line) {
+    super.onDashComplete(line);
     
   }
 
