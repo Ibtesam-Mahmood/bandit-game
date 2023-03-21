@@ -44,8 +44,8 @@ class KillLine extends RectangleComponent with CollisionCallbacks {
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
 
     // dammage the other actor
     if(other is BaseActor && other.type != pool.actor.type){

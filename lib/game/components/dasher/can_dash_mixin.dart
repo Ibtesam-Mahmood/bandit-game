@@ -1,10 +1,8 @@
 
-import 'package:bandit/game/bandit_game.dart';
 import 'package:bandit/game/components/actors/base_actor.dart';
 import 'package:bandit/game/components/dasher/dash_line_indicator.dart';
 import 'package:bandit/game/components/dasher/dash_range.dart';
 import 'package:bandit/game/components/dasher/kill_line/kill_line_pool.dart';
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +10,7 @@ import 'package:flutter/material.dart';
 mixin CanDashActor on BaseActor {
 
   double get initialDashRange => 1000;
-  double get dashReloadTime => 0.1;
+  double get dashReloadTime => 0.4;
   Duration get lineLife => KillLinePool.defaultLineLife;
 
   late final DashRange range = DashRange(
