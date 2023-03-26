@@ -1,9 +1,7 @@
 
 import 'package:bandit/game/bandit_game.dart';
 import 'package:bandit/game/components/actors/base_actor.dart';
-import 'package:bandit/game/components/actors/enemy/enemy.dart';
 import 'package:bandit/game/components/dasher/can_dash_mixin.dart';
-import 'package:bandit/game/components/dasher/kill_line/kill_line.dart';
 import 'package:bandit/game/components/mixins/face_movement_mixin.dart';
 import 'package:bandit/game/util/game_layers.dart';
 import 'package:flame/collisions.dart';
@@ -14,16 +12,12 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, HasGameRef<B
 
   static final Vector2 playerSize = Vector2(50, 50);
   static final Vector2 playerStart = Vector2(300, 300);
-  static const double shrinkRate = 35;
-  static const double growRate = 100;
 
   BanditPlayer() : super(
     size: BanditPlayer.playerSize,
     position: BanditPlayer.playerStart,
     priority: GameLayers.player.layer,
   );
-
-  late double lastRange = initialDashRange;
 
 /*
  
@@ -41,7 +35,6 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, HasGameRef<B
 
   @override
   Future<void> onLoad() async {
-    // debugMode = true;
 
     add(CircleHitbox()); // Adds a hitbox to the player in the shape of a circle
 
@@ -75,41 +68,10 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, HasGameRef<B
   }
 
   @override
-  void hit(BaseActor other, {bool override = false}) {
-    super.hit(other, override: override);
-    // Add to the range
-    range.grow(growRate);
-  }
-  
-  @override
   void update(double dt) {
     super.update(dt);
 
-    // Reduce the reload range over time
-    if(!dashing){
-      // dashing = true;
-      range.shrink(shrinkRate * dt);
-    }
-    if(lastRange != range.radius){
-      if(!rangeIndicator.isClear){
-        prepareDash(rangeIndicator.end);
-      }
-      if(range.radius == size.x / 2){
-        return onDeath();
-      }
-      lastRange = range.radius;
-    }
-  }
 
-  @override
-  void dash([Vector2? position]) {
-    super.dash(position);
-    
-  }
-  @override
-  void onDashComplete(KillLine line) {
-    super.onDashComplete(line);
-    
   }
 
 /*
@@ -123,12 +85,4 @@ class BanditPlayer extends SpriteAnimationComponent with BaseActor, HasGameRef<B
  
 */
 
-  // @override 
-  // void onDetect(BaseActor other, ) {
-  //   super.onDetect(other);
-  //   if(other.type == BaseActorType.enemy){
-  //     prepareDash(other.center);
-  //     dash();
-  //   }
-  // }
 }

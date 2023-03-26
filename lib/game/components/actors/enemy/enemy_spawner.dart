@@ -84,4 +84,8 @@ class EnemySpawer extends Component with HasGameRef<BanditGame> {
   }
 
   void _loop([bool loop = false]) => Future.delayed(spawnRate, () => spawn(loop));
+
+  void reset(){
+    
+  }
 }

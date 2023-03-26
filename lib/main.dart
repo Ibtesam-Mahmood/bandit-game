@@ -1,9 +1,19 @@
-import 'package:bandit/game/bandit_game.dart';
-import 'package:flame/game.dart';
+import 'package:bandit/blocs/score/score_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'menu/GameMenu.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<ScoreBloc>(
+        create: (context) => ScoreBloc(),
+      ),
+
+    ],
+    child: const MyApp()
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,11 +22,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Bandit Game',
       home: Scaffold(
-        body: GameWidget(game: BanditGame(),)
-      ),
+          body: GameMenu()
+        ),
     );
   }
 }

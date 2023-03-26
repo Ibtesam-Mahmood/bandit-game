@@ -1,4 +1,3 @@
-
 import 'package:bandit/game/components/actors/base_actor.dart';
 import 'package:bandit/game/components/dasher/dash_line_indicator.dart';
 import 'package:bandit/game/components/dasher/dash_range.dart';
